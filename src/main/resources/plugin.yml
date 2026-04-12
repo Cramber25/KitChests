@@ -1,0 +1,23 @@
+name: KitChests
+description: $description
+prefix: KitChest
+version: '${version}'
+
+main: pl.cramber.kitchests.KitChests
+api-version: '1.21'
+load: POSTWORLD
+folia-supported: true
+
+authors: [ Cramber ]
+website: https://github.com/Cramber25/KitChests
+
+commands:
+  kitchest:
+    description: Manage KitChests
+    usage: /kitchest <create|remove>
+    permission: kitchests.admin
+
+permissions:
+  kitchests.admin:
+    description: Allows management of KitChests
+    default: op
