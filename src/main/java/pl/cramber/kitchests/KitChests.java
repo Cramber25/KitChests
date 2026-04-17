@@ -11,6 +11,10 @@ public final class KitChests extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
+        // bStats
+        int pluginId = 30799;
+        Metrics metrics = new Metrics(this, pluginId);
+
         dataManager = new DataManager(this);
 
         getServer().getPluginManager().registerEvents(new KitListener(this), this);
