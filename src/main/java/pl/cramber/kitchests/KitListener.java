@@ -14,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -119,15 +120,39 @@ public class KitListener implements Listener {
     public void onClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() instanceof KitHolder) {
             Inventory topInv = event.getView().getTopInventory();
+            Inventory clickedInv = event.getClickedInventory();
 
-            if (event.getClickedInventory() != null && event.getClickedInventory().equals(topInv)) {
-                if (event.getCursor() != null && !event.getCursor().getType().isAir()) {
-                    event.setCancelled(true);
-                }
+            if (clickedInv == null) {
+                return;
             }
 
-            if (event.isShiftClick() && event.getClickedInventory() != null && !event.getClickedInventory().equals(topInv)) {
+            if (!clickedInv.equals(topInv)) {
+                if (event.isShiftClick()) {
+                    event.setCancelled(true);
+                }
+                return;
+            }
+
+            if (event.getClick() == ClickType.NUMBER_KEY || event.getClick() == ClickType.SWAP_OFFHAND) {
                 event.setCancelled(true);
+                return;
+            }
+
+            if (event.getCursor() != null && !event.getCursor().getType().isAir()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            switch (event.getAction()) {
+                case PLACE_ALL:
+                case PLACE_ONE:
+                case PLACE_SOME:
+                case SWAP_WITH_CURSOR:
+                case COLLECT_TO_CURSOR:
+                    event.setCancelled(true);
+                    break;
+                default:
+                    break;
             }
         }
     }
